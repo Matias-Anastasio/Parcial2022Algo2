@@ -20,7 +20,8 @@ enum class MARCA{
 
 abstract class Regalo(
     val costo: Int,
-    val marca: MARCA
+    val marca: MARCA,
+    val codigo: String
 ) {
 
     abstract fun criterioValioso() : Boolean
@@ -32,24 +33,24 @@ abstract class Regalo(
     fun esCaro(costoMinimo: Int) = costo > costoMinimo
 }
 
-class Ropa(costo: Int, marca: MARCA) : Regalo(costo, marca) {
+class Ropa(costo: Int, marca: MARCA, codigo: String) : Regalo(costo, marca, codigo) {
     val marcasValiosas = listOf(MARCA.Jordache,MARCA.Lee,MARCA.Charro,MARCA.MotorOil)
     override fun criterioValioso() : Boolean = marcasValiosas.contains(marca)
 }
 
-class Juguete(val anioDeLanzamiento : Int, costo: Int, marca: MARCA) : Regalo(costo, marca){
+class Juguete(val anioDeLanzamiento : Int, costo: Int, marca: MARCA, codigo: String) : Regalo(costo, marca, codigo){
     override fun criterioValioso(): Boolean = anioDeLanzamiento < 2_000
 }
 
-class Perfume(val origen :ORIGEN,costo: Int, marca: MARCA) : Regalo(costo, marca){
+class Perfume(val origen :ORIGEN, costo: Int, marca: MARCA, codigo: String) : Regalo(costo, marca, codigo){
     override fun criterioValioso(): Boolean = origen == ORIGEN.EXTRANJERO
 }
 
-class Experiencia(val fecha: LocalDate,costo: Int, marca: MARCA) : Regalo(costo, marca){
+class Experiencia(val fecha: LocalDate, costo: Int, marca: MARCA, codigo: String) : Regalo(costo, marca, codigo){
     override fun criterioValioso(): Boolean = fecha.dayOfWeek == DayOfWeek.FRIDAY
 }
 
-object Voucher : Regalo(2000,MARCA.Papapp){
+object Voucher : Regalo(2000,MARCA.Papapp,"AA001"){
     override fun criterioValioso(): Boolean = false
 }
 

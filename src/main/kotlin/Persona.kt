@@ -1,8 +1,10 @@
 class Persona(
     val nombre: String,
-    val email: String
+    val email: String,
+    val direccion: String,
+    val dni: Int
 ){
-    val regalosRecibidos = mutableListOf<Regalo>()
+
     var criterioParaRegalo :tipoDeGusto = Conformista
 
     fun cambiarCriterio(criterio : tipoDeGusto){
@@ -11,9 +13,6 @@ class Persona(
 
     fun aceptaRegalo(regalo: Regalo) : Boolean = criterioParaRegalo.leGusta(regalo)
 
-    fun recibirRegalo(regalo: Regalo){
-        regalosRecibidos.add(regalo)
-    }
 }
 
 interface tipoDeGusto{

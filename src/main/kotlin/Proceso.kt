@@ -1,31 +1,26 @@
-import com.sun.jdi.Value
+class Proceso{
 
-class Regalador{
-
-    val personas = mutableListOf<Persona>()
     val regalos = mutableListOf<Regalo>()
     val registroDeRegalos = mutableMapOf<Persona,MutableList<Regalo>>()
-    val observers = mutableListOf<RegaladorObserver>()
+    val observers = mutableListOf<ProcesoObserver>()
 
-    fun agregarPersona(persona: Persona){
-        personas.add(persona)
-    }
+
 
     fun agregarRegalo(regalo: Regalo){
         regalos.add(regalo)
     }
 
-    fun agregarObserver(observer: RegaladorObserver){
+    fun agregarObserver(observer: ProcesoObserver){
         observers.add(observer)
     }
 
-    fun removerObserver(observer: RegaladorObserver){
+    fun removerObserver(observer: ProcesoObserver){
         observers.remove(observer)
     }
 
-    fun regalar(){
-        personas.forEach{persona -> persona.recibirRegalo(buscarRegalo(persona))}
-
+    fun regalarA(persona: Persona){
+        val regaloAdecuado = buscarRegalo(persona)
+        registrarRegalo(persona,regaloAdecuado)
     }
 
     fun buscarRegalo(persona: Persona) : Regalo{
@@ -34,27 +29,13 @@ class Regalador{
         }
         return Voucher
     }
-}
 
-interface RegaladorObserver{
-    fun regalosHechos(regalador: Regalador,persona: Persona,regalo: Regalo)
-}
+    fun registrarRegalo(persona: Persona,regalo: Regalo){
+        registroDeRegalos.computeIfAbsent(persona) {mutableListOf()}.add(regalo)
+        notificarObservers(persona,regalo)
+    }
 
-class NotificadorObserver : RegaladorObserver{
-    override fun regalosHechos(regalador: Regalador, persona: Persona, regalo: Regalo) {
-
+    fun notificarObservers(persona: Persona,regalo: Regalo){
+        observers.forEach{it.regaloHecho(this,persona,regalo)}
     }
 }
-
-class EnviosObserver : RegaladorObserver{
-    override fun regalosHechos(regalador: Regalador, persona: Persona, regalo: Regalo) {
-
-    }
-}
-
-class RegistroObserver : RegaladorObserver{
-    override fun regalosHechos(regalador: Regalador, persona: Persona, regalo: Regalo) {
-        TODO("Not yet implemented")
-    }
-}
-
